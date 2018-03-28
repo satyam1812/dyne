@@ -19,7 +19,6 @@ exports.updateUserData = function(data, condition, callback) {
 	});
 }
 exports.insertuserdata = function(manValues, callback) {
-	console.log(manValues);
 	var sql = "INSERT INTO `user1`( `name`,`email`,`password`,`device_type`,`device_token`,`longitude`,`latitude`,`user_id`,`access_token`) VALUES(?)";
 	connection.query(sql , [manValues] , function(err){
 		if(err){
@@ -29,11 +28,10 @@ exports.insertuserdata = function(manValues, callback) {
 			callback(1);
 		}
 	});
-	//var manValues = [name, email , password, device_type, device_token, longitude, latitude];
 }
-exports.showalldata = function(email,callback){
-	var sql = "SELECT * FROM `user1` WHERE `email`=?";
-	connection.query(sql,[email],function(err,result){
+exports.showalldata = function(access_token,callback){
+	var sql = "SELECT * FROM `user1` WHERE `access_token`=?";
+	connection.query(sql,[access_token],function(err,result){
 		if(err){
 			callback(0);
 		} else{

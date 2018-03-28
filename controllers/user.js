@@ -2,6 +2,8 @@ var commfunc = require('../modules/commonFunction');
 var responses = require('../modules/responses');
 var UserModal = require('../modals/user');
 var md5 = require("md5");
+ var ageCalculator = require('age-calculator');
+  let {AgeFromDateString, AgeFromDate} = require('age-calculator');
 
 /* Controller for user login */ 
 exports.login = function(req, res) {
@@ -69,7 +71,7 @@ exports.signup = function(req,res) {
 					if(insertresult == 0){
 						responses.sendError(res);
 					} else {
-						UserModal.showalldata(email,function(showresult){
+						UserModal.showalldata(access_token,function(showresult){
 							if(showresult == 0){
 								responses.sendError(res);
 							} else {
@@ -84,4 +86,45 @@ exports.signup = function(req,res) {
 		});
 	}
 	
+}
+exports.create = function(req,res) {
+	var {birth_date,status,access_token} = req.body;
+	var manValues = [birth_date,status,access_token];
+	var checkBlank = commfunc.checkBlank(manValues);
+	console.log(birth_date);
+	birth_date = new Date(birth_date);
+	var month = birth_date.getUTCMonth() + 1; //months from 1-12
+	var day = birth_date.getUTCDate();
+	var year = birth_date.getUTCFullYear();
+	var age = new AgeFromDate(new Date(year,month,day)).age; 
+	if(checkBlank == 1) {
+		responses.parameterMissing(res);
+	} else {
+		var cover_image="";
+		var profile_image="";
+		for(i=0;i<req.files.length;i++) {
+			if(req.files[i].fieldname == "profile_image"){
+				profile_image=req.files[i].filename; 
+			} else if(req.files[i].fieldname == "cover_image") {
+				cover_image=req.files[i].filename;
+			}
+		}
+
+		var data = {birth_date:birth_date,status:status,age:age,cover_image:cover_image,profile_image:profile_image};
+		var condition = {access_token:access_token};
+		UserModal.updateUserData(data,condition,function(updatedResult){
+			if(updatedResult  == 0){
+				responses.sendError(res)
+			} else{
+				UserModal.showalldata(access_token,function(showresult){
+					if(showresult == 0) {
+						responses.sendError(res);
+					} else {
+						showresult[0].password = "";
+						responses.success(res,showresult);
+					}
+				});
+			}
+		});
+	}
 }
