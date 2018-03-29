@@ -1,0 +1,7 @@
+{
+  
+    "SMTP_HOST": "smtp.sendgrid.net",
+    "SMTP_PORT": 25,
+    "SMTP_USER": "apikey",
+    "SMTP_PASS":  "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"
+}

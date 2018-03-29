@@ -16,6 +16,10 @@
     "md5": "^2.2.1",
     "multer": "^1.3.0",
     "mysql": "^2.15.0",
-    "nodemon": "^1.17.2"
+    "nodemailer": "^4.6.3",
+    "nodemailer-smtp-transport": "^2.7.4",
+    "nodemon": "^1.17.2",
+    "sendotp": "^1.2.8",
+    "twilio": "^3.14.0"
   }
 }

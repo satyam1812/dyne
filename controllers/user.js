@@ -50,6 +50,7 @@ exports.login = function(req, res) {
 
 exports.signup = function(req,res) {
 	var {name,email,password,device_type,device_token,longitude,latitude} = req.body;
+	var password = md5(password);
 	var manValues = [name, email, password, device_type, device_token, longitude, latitude];
 	var checkBlank = commfunc.checkBlank(manValues);
 	if(checkBlank == 1){
@@ -66,22 +67,23 @@ exports.signup = function(req,res) {
 
 				manValues.push(user_id);
 				manValues.push(access_token);
+				
+					UserModal.insertuserdata(manValues, function(insertresult){
+						if(insertresult == 0){
+							responses.sendError(res);
+						} else {
+							UserModal.showalldata(access_token,function(showresult){
+								if(showresult == 0){
+									responses.sendError(res);
+								} else {
+									var checkemail = commfunc.sendMail(email);
+									responses.success(res,showresult);
 
-				UserModal.insertuserdata(manValues, function(insertresult){
-					if(insertresult == 0){
-						responses.sendError(res);
-					} else {
-						UserModal.showalldata(access_token,function(showresult){
-							if(showresult == 0){
-								responses.sendError(res);
-							} else {
-								responses.success(res,showresult);
+								} 
+							});
 
-							} 
-						});
-
-					}
-				}); 
+						}
+					});
 			}
 		});
 	}
