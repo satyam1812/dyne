@@ -1,3 +1,4 @@
+var responses = require('../modules/responses');
 var mysql = require('mysql');
 
 var connection = mysql.createConnection({
@@ -9,11 +10,7 @@ var connection = mysql.createConnection({
  
 connection.connect(function(err){
 	if (err) {
-		var error = {
-			status: 0,
-			message: "Error in execution"
-		}
-		res.send(error);
+		responses.sendError(err);
 	} else {
 		console.log("database is working");	
 	}
