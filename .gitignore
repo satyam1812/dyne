@@ -1,3 +1,9 @@
 /node_modules
 /image
 /uploads
+/config.js
+/email.js
+/maps.js
+/otp.js
+/promise.js
+/random.js
